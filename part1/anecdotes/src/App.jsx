@@ -25,6 +25,11 @@ const App = () => {
 		setVotes(votesCopy);
 	};
 
+	const indexOfMaxValue = votes.reduce(
+		(iMax, x, i, arr) => (x > arr[iMax] ? i : iMax),
+		0,
+	);
+
 	return (
 		<div>
 			<h1>Anecdote of the day</h1>
@@ -38,6 +43,12 @@ const App = () => {
 			<button type="button" onClick={nextAnecdote}>
 				next anecdote
 			</button>
+			<h1>Anecdote with most votes</h1>
+			<p>
+				{anecdotes[indexOfMaxValue]}
+				<br />
+				has {votes[indexOfMaxValue]} votes.
+			</p>
 		</div>
 	);
 };
