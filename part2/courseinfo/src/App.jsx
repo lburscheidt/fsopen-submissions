@@ -17,12 +17,11 @@ const Content = (props) => {
 };
 
 const Total = (props) => {
+	const exercises = props.parts.map((part) => part.exercises);
+	const total = exercises.reduce((s, p) => s + p, 0);
 	return (
 		<p>
-			Number of exercises
-			{props.parts[0].exercises +
-				props.parts[1].exercises +
-				props.parts[2].exercises}
+			<strong>Total of {total} exercises</strong>
 		</p>
 	);
 };
