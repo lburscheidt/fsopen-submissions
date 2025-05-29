@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import personService from "./services/persons";
+import "./index.css";
 
 const Filter = (props) => {
 	return (
@@ -109,11 +110,19 @@ const App = () => {
 						setPersons(persons);
 					});
 				});
+				setSuccessMessage(`Successfully updated phone number for ${newName}`);
+				setTimeout(() => {
+					setSuccessMessage("");
+				}, 5000);
 			}
 		} else {
 			personService.create(personObject).then((response) => {
 				setPersons(persons.concat(personObject));
 			});
+			setSuccessMessage(`Successfully added ${newName}`);
+			setTimeout(() => {
+				setSuccessMessage("");
+			}, 5000);
 		}
 		setNewName("");
 		setNewNumber("");
