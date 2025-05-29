@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import personService from "./services";
+import personService from "./services/persons";
+
 const Filter = (props) => {
 	return (
 		<label>
@@ -12,14 +13,26 @@ const Filter = (props) => {
 
 const Person = (props) => {
 	return (
-		<p key={props.person.name}>
+		<p key={props.person.id}>
 			{props.person.name} {props.person.number}
+			<button
+				type="button"
+				onClick={() => {
+					if (window.confirm(`Do you want to delete ${props.person.name}?`)) {
+						props.deletePerson(props.person.id);
+					}
+				}}
+			>
+				Delete
+			</button>
 		</p>
 	);
 };
 
 const Persons = (props) => {
-	return props.persons.map((person) => <Person person={person} />);
+	return props.persons.map((person) => (
+		<Person key={person.id} person={person} deletePerson={props.deletePerson} />
+	));
 };
 
 const PersonForm = (props) => {
@@ -64,6 +77,12 @@ const App = () => {
 		setSearchInput(event.target.value);
 	};
 
+	const deletePerson = (id) => {
+		personService.remove(id).then(() => {
+			setPersons(persons.filter((person) => person.id !== id));
+		});
+	};
+
 	const addNewPerson = (event) => {
 		event.preventDefault();
 		const personObject = { name: newName, number: newNumber };
@@ -99,7 +118,7 @@ const App = () => {
 				addNewPerson={addNewPerson}
 			/>
 			<h3>Numbers</h3>
-			<Persons persons={personsToShow} />
+			<Persons persons={personsToShow} deletePerson={deletePerson} />
 		</div>
 	);
 };
