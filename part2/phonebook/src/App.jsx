@@ -20,7 +20,7 @@ const Person = (props) => {
 				type="button"
 				onClick={() => {
 					if (window.confirm(`Do you want to delete ${props.person.name}?`)) {
-						props.deletePerson(props.person.id);
+						props.deletePerson(props.person.id, props.person.name);
 					}
 				}}
 			>
@@ -89,11 +89,11 @@ const App = () => {
 		setSearchInput(event.target.value);
 	};
 
-	const deletePerson = (id) => {
+	const deletePerson = (id, name) => {
 		personService.remove(id).then(() => {
 			setPersons(persons.filter((person) => person.id !== id));
 		});
-		setErrorMessage("Success");
+		setErrorMessage(`Successfully deleted ${name}`);
 		setTimeout(() => {
 			setSuccessMessage("");
 		}, 5000);
