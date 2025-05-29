@@ -93,6 +93,10 @@ const App = () => {
 		personService.remove(id).then(() => {
 			setPersons(persons.filter((person) => person.id !== id));
 		});
+		setErrorMessage("Success");
+		setTimeout(() => {
+			setSuccessMessage("");
+		}, 5000);
 	};
 
 	const addNewPerson = (event) => {
