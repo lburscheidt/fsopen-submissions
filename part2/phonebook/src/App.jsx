@@ -70,7 +70,11 @@ const App = () => {
 		if (persons.find((p) => p.name === newName)) {
 			alert(`${newName} is already added to phone book`);
 		} else {
-			setPersons(persons.concat(personObject));
+			axios
+				.post("http://localhost:3001/persons", personObject)
+				.then((response) => {
+					setPersons(persons.concat(personObject));
+				});
 		}
 		setNewName("");
 		setNewNumber("");
