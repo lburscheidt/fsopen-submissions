@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import personService from "./services";
 const Filter = (props) => {
 	return (
 		<label>
@@ -70,11 +70,9 @@ const App = () => {
 		if (persons.find((p) => p.name === newName)) {
 			alert(`${newName} is already added to phone book`);
 		} else {
-			axios
-				.post("http://localhost:3001/persons", personObject)
-				.then((response) => {
-					setPersons(persons.concat(personObject));
-				});
+			personService.create(personObject).then((response) => {
+				setPersons(persons.concat(personObject));
+			});
 		}
 		setNewName("");
 		setNewNumber("");
