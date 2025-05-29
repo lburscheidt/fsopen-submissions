@@ -54,12 +54,23 @@ const PersonForm = (props) => {
 	);
 };
 
+const Notification = ({ errorMessage, successMessage }) => {
+	if (errorMessage === "" && successMessage === "") {
+		return "";
+	}
+	if (successMessage) {
+		return <div className="success">{successMessage}</div>;
+	}
+	return <div className="error">{errorMessage}</div>;
+};
+
 const App = () => {
 	const [persons, setPersons] = useState([]);
-
 	const [newName, setNewName] = useState("");
 	const [newNumber, setNewNumber] = useState("");
 	const [searchInput, setSearchInput] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
+	const [successMessage, setSuccessMessage] = useState("");
 
 	const personsToShow = searchInput
 		? persons.filter((p) => p.name.toLowerCase().includes(searchInput))
@@ -119,6 +130,10 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phone Book</h2>
+			<Notification
+				errorMessage={errorMessage}
+				successMessage={successMessage}
+			/>
 			<Filter searchInput={searchInput} handleSearchInput={handleSearchInput} />
 			<h3>Add a new</h3>
 			<PersonForm
