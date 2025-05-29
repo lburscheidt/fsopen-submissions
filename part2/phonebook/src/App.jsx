@@ -87,7 +87,18 @@ const App = () => {
 		event.preventDefault();
 		const personObject = { name: newName, number: newNumber };
 		if (persons.find((p) => p.name === newName)) {
-			alert(`${newName} is already added to phone book`);
+			const id = persons.find((p) => p.name === newName).id;
+			if (
+				window.confirm(
+					`${newName} is already added to phone book, replace the old number with a new one?`,
+				)
+			) {
+				personService.update(id, personObject).then((response) => {
+					personService.getAll().then((persons) => {
+						setPersons(persons);
+					});
+				});
+			}
 		} else {
 			personService.create(personObject).then((response) => {
 				setPersons(persons.concat(personObject));
