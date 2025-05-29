@@ -47,7 +47,7 @@ const PersonForm = (props) => {
 				<input value={props.newNumber} onChange={props.handleNumberChange} />
 			</div>
 			<div>
-				<button type="submit" onClick={props.addNewPerson}>
+				<button type="submit" onClick={props.addpersonObject}>
 					add
 				</button>
 			</div>
@@ -90,34 +90,45 @@ const App = () => {
 	};
 
 	const deletePerson = (id, name) => {
-		personService.remove(id).then(() => {
-			setPersons(persons.filter((person) => person.id !== id));
-		});
-		setErrorMessage(`Successfully deleted ${name}`);
+		setSuccessMessage(`Successfully deleted ${name}`);
 		setTimeout(() => {
 			setSuccessMessage("");
 		}, 5000);
+		personService.remove(id).then(() => {
+			setPersons(persons.filter((person) => person.id !== id));
+		});
 	};
 
-	const addNewPerson = (event) => {
+	const addpersonObject = (event) => {
 		event.preventDefault();
 		const personObject = { name: newName, number: newNumber };
 		if (persons.find((p) => p.name === newName)) {
 			const id = persons.find((p) => p.name === newName).id;
 			if (
 				window.confirm(
-					`${newName} is already added to phone book, replace the old number with a new one?`,
+					`${newName} is already in phonebook, want to replace the old number with a new one?`,
 				)
 			) {
-				personService.update(id, personObject).then((response) => {
-					personService.getAll().then((persons) => {
-						setPersons(persons);
+				personService
+					.update(id, personObject)
+					.then((response) => {
+						setSuccessMessage(`Successfully added new number for ${newName}`);
+						setTimeout(() => {
+							setSuccessMessage("");
+						}, 5000);
+					})
+					.catch((error) => {
+						setErrorMessage(
+							`Data for ${newName} was already removed from server`,
+						);
+						setTimeout(() => {
+							setErrorMessage("");
+						}, 5000);
 					});
+
+				personService.getAll().then((persons) => {
+					setPersons(persons);
 				});
-				setSuccessMessage(`Successfully updated phone number for ${newName}`);
-				setTimeout(() => {
-					setSuccessMessage("");
-				}, 5000);
 			}
 		} else {
 			personService.create(personObject).then((response) => {
@@ -154,7 +165,7 @@ const App = () => {
 				handleNameChange={handleNameChange}
 				newNumber={newNumber}
 				handleNumberChange={handleNumberChange}
-				addNewPerson={addNewPerson}
+				addpersonObject={addpersonObject}
 			/>
 			<h3>Numbers</h3>
 			<Persons persons={personsToShow} deletePerson={deletePerson} />
