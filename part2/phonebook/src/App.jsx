@@ -6,23 +6,23 @@ import "./index.css";
 const Filter = (props) => {
 	return (
 		<label>
-			filter shown with{" "}
-			<input value={props.searchInput} onChange={props.handleSearchInput} />
+			filter shown with{ " " }
+			<input value={ props.searchInput } onChange={ props.handleSearchInput } />
 		</label>
 	);
 };
 
 const Person = (props) => {
 	return (
-		<p key={props.person.id}>
-			{props.person.name} {props.person.number}
+		<p key={ props.person.id }>
+			{ props.person.name } { props.person.number }
 			<button
 				type="button"
-				onClick={() => {
+				onClick={ () => {
 					if (window.confirm(`Do you want to delete ${props.person.name}?`)) {
 						props.deletePerson(props.person.id, props.person.name);
 					}
-				}}
+				} }
 			>
 				Delete
 			</button>
@@ -32,7 +32,7 @@ const Person = (props) => {
 
 const Persons = (props) => {
 	return props.persons.map((person) => (
-		<Person key={person.id} person={person} deletePerson={props.deletePerson} />
+		<Person key={ person.id } person={ person } deletePerson={ props.deletePerson } />
 	));
 };
 
@@ -40,14 +40,14 @@ const PersonForm = (props) => {
 	return (
 		<form>
 			<div>
-				name: <input value={props.newName} onChange={props.handleNameChange} />
+				name: <input value={ props.newName } onChange={ props.handleNameChange } />
 			</div>
 			<div>
-				number:{" "}
-				<input value={props.newNumber} onChange={props.handleNumberChange} />
+				number:{ " " }
+				<input value={ props.newNumber } onChange={ props.handleNumberChange } />
 			</div>
 			<div>
-				<button type="submit" onClick={props.addpersonObject}>
+				<button type="submit" onClick={ props.addpersonObject }>
 					add
 				</button>
 			</div>
@@ -60,9 +60,9 @@ const Notification = ({ errorMessage, successMessage }) => {
 		return "";
 	}
 	if (successMessage) {
-		return <div className="success">{successMessage}</div>;
+		return <div className="success">{ successMessage }</div>;
 	}
-	return <div className="error">{errorMessage}</div>;
+	return <div className="error">{ errorMessage }</div>;
 };
 
 const App = () => {
@@ -155,20 +155,20 @@ const App = () => {
 		<div>
 			<h2>Phone Book</h2>
 			<Notification
-				errorMessage={errorMessage}
-				successMessage={successMessage}
+				errorMessage={ errorMessage }
+				successMessage={ successMessage }
 			/>
-			<Filter searchInput={searchInput} handleSearchInput={handleSearchInput} />
+			<Filter searchInput={ searchInput } handleSearchInput={ handleSearchInput } />
 			<h3>Add a new</h3>
 			<PersonForm
-				newName={newName}
-				handleNameChange={handleNameChange}
-				newNumber={newNumber}
-				handleNumberChange={handleNumberChange}
-				addpersonObject={addpersonObject}
+				newName={ newName }
+				handleNameChange={ handleNameChange }
+				newNumber={ newNumber }
+				handleNumberChange={ handleNumberChange }
+				addpersonObject={ addpersonObject }
 			/>
 			<h3>Numbers</h3>
-			<Persons persons={personsToShow} deletePerson={deletePerson} />
+			<Persons persons={ personsToShow } deletePerson={ deletePerson } />
 		</div>
 	);
 };
