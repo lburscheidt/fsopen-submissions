@@ -4,8 +4,19 @@ const morgan = require("morgan");
 const generateId = () => {
 	return String(Math.floor(Math.random() * 100));
 };
-app.use(morgan("tiny"));
+
 app.use(express.json());
+morgan.token("id", function getId(req) {
+	return req.id;
+});
+morgan.token("body", function getId(req) {
+	return JSON.stringify(req.body);
+});
+
+app.use(
+	morgan(":method :url :status :res[content-length] - :response-time ms :body"),
+);
+
 let persons = [
 	{
 		id: "1",
