@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
-
+const morgan = require("morgan");
 const generateId = () => {
 	return String(Math.floor(Math.random() * 100));
 };
-
+app.use(morgan("tiny"));
 app.use(express.json());
 let persons = [
 	{
