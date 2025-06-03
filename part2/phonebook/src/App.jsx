@@ -1,5 +1,6 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import personService from "./services/persons";
+import axios from "axios";
 const Filter = (props) => {
   return (
     <label>
@@ -27,24 +28,39 @@ const PersonForm = (props) => {
   );
 };
 
-const Persons = (props) => {
-  return props.personsToShow.map((person) => (
-    <p key={ person.name }>
-      { person.name } { person.number }
-    </p>
+const Persons = ({
+  personsToShow, deletePerson }) => {
+  return personsToShow.map((p) => (
+    <Person key={ p.id } id={ p.id } name={ p.name } number={ p.number } deletePerson={ deletePerson } />
   ));
 };
 
+const Person = (props) => {
+  console.log(props)
+  return (<p key={ props.id }>{ props.name } { props.number } <button
+    type="button"
+    onClick={ () => {
+      if (window.confirm(`Do you want to delete ${props.name}?`)) {
+        props.deletePerson(props.id, props.name);
+      }
+    } }
+  >
+    Delete
+  </button></p>)
+}
+
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    personService.getAll().then((response) => {
+      setPersons(response);
+    });
+  }, []);
+  console.log("render", persons.length, "notes");
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -58,6 +74,10 @@ const App = () => {
     setSearchInput(event.target.value);
   };
 
+  const deletePerson = (id) => {
+    personService.remove(id).then((response) => setPersons(persons.filter((person) => person.id !== id)));
+  }
+
   const addPerson = (event) => {
     event.preventDefault();
     if (persons.find((p) => p.name === newName)) {
@@ -65,6 +85,9 @@ const App = () => {
     } else {
       const newPerson = { name: newName, number: newNumber };
       setPersons(persons.concat(newPerson));
+      personService.create(newPerson).then((response) => {
+        setPersons(persons.concat(response.data));
+      });
     }
     setNewName("");
     setNewNumber("");
@@ -90,7 +113,7 @@ const App = () => {
         addPerson={ addPerson }
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={ personsToShow } />
+      <Persons personsToShow={ personsToShow } deletePerson={ deletePerson } />
     </div>
   );
 };
